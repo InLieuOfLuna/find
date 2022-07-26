@@ -1,16 +1,15 @@
 package me.lunaluna.find.fabric.mixins;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import me.lunaluna.find.fabric.Startup;
 import me.lunaluna.find.fabric.config.Config;
 import me.lunaluna.find.fabric.widget.FindWidget;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
-import org.apache.logging.log4j.util.Strings;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,12 +18,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Objects;
-
 @Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin extends Screen {
     @Shadow protected int x;
     @Shadow protected int y;
+    @Shadow protected int backgroundHeight;
 
     protected HandledScreenMixin(Text title) { super(title); }  // Never called just to avoid compile errors
     private static final boolean RENDER_OVER = true;
@@ -33,7 +31,7 @@ public abstract class HandledScreenMixin extends Screen {
 
     @Inject(at = @At("TAIL"), method = "init")
     private void init(CallbackInfo ci) {
-        widget = new FindWidget(x + 1, y + 170);
+        widget = new FindWidget(x + 1, y + backgroundHeight + 4);
         addSelectableChild(widget);
     }
 
