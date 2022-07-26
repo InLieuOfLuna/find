@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 
 public class FindWidget extends TextFieldWidget {
 
-    private static String search = "";
+    public static String search = "";
 
     public FindWidget(int x, int y) {
         super(MinecraftClient.getInstance().textRenderer, x, y, 174, 18, Text.empty());
