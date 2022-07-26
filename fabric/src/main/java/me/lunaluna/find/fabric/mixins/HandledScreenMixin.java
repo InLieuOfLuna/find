@@ -25,7 +25,6 @@ public abstract class HandledScreenMixin extends Screen {
     @Shadow protected int backgroundHeight;
 
     protected HandledScreenMixin(Text title) { super(title); }  // Never called just to avoid compile errors
-    private static final boolean RENDER_OVER = true;
     private static final boolean HAS_BORDER = true;
     private FindWidget widget;
 
@@ -71,20 +70,13 @@ public abstract class HandledScreenMixin extends Screen {
         widget.render(matrices, mouseX, mouseY, delta);
     }
     private void darkenSlot(MatrixStack matrices, int x, int y) {
-        matrices.push();
+        var color = Config.INSTANCE.color().getRGB();
+        var border = HAS_BORDER ? 1 : 0;
 
-        int offset = getZOffset() + (RENDER_OVER ? 100 : 0);
-        int border = HAS_BORDER ? 1 : 0;
-
-        matrices.translate(0, 0, offset);
-
-        DrawableHelper.fill(
-                matrices,
-                x - border, y - border,
-                x + 16 + border, y + 16 + border,
-                Config.INSTANCE.color().getRGB()
-        );
-
-        matrices.pop();
+        RenderSystem.disableDepthTest();
+        RenderSystem.colorMask(true, true, true, false);
+        fillGradient(matrices, x - border, y - border, x + 16 + border, y + 16 + border, color, color, getZOffset());
+        RenderSystem.colorMask(true, true, true, true);
+        RenderSystem.enableDepthTest();
     }
 }
