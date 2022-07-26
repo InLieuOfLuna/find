@@ -68,7 +68,7 @@ public abstract class HandledScreenMixin extends Screen {
 
     @Inject(at = @At("TAIL"), method = "render")
     private void renderSearch(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        if (widget.isFocused() || Strings.isNotBlank(widget.getText())) widget.render(matrices, mouseX, mouseY, delta);
+        widget.render(matrices, mouseX, mouseY, delta);
     }
     private void darkenSlot(MatrixStack matrices, int x, int y) {
         matrices.push();
