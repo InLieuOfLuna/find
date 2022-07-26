@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "find",
+  "version": "${{mod_version}}",
+  "name": "Find",
+  "authors": ["Luna"],
+  "contact": {
+    "website": "https://www.lunaluna.me",
+    "repo": "https://github.com/InLieuOfLuna/find/"
+  },
+  "LICENSE": "MIT",
+  "environment": "client",
+  "mixins": [
+    "find.mixins.json"
+  ],
+  "entrypoints": {
+    "client": [
+      "me.lunaluna.find.fabric.Startup"
+    ]
+  },
+  "depends": {
+    "minecraft": "${{minecraft_version}}",
+    "fabricloader": ">=${{loader_version}}",
+    "fabric-key-binding-api-v1": ">=${{fabric_api}}"
+  }
+}
