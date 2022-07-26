@@ -43,18 +43,12 @@ public abstract class HandledScreenMixin extends Screen {
             }
             widget.keyPressed(keyCode, scanCode, modifiers);
             cir.setReturnValue(true);
-        }
-    }
-
-    @Inject(at = @At("TAIL"), method = "keyPressed")
-    private void toggleFind(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (Startup.toggle.matchesKey(keyCode, scanCode) && modifiers == GLFW.GLFW_MOD_CONTROL) {
-            if (!widget.isFocused()) {
-                focusOn(widget);
-                widget.changeFocus(true);
-                widget.setSelectionStart(0);
-                widget.setSelectionEnd(widget.getText().length());
-            }
+        } else if (Startup.toggle.matchesKey(keyCode, scanCode) && modifiers == GLFW.GLFW_MOD_CONTROL) {
+            focusOn(widget);
+            widget.changeFocus(true);
+            widget.setSelectionStart(0);
+            widget.setSelectionEnd(widget.getText().length());
+            cir.setReturnValue(true);
         }
     }
 
