@@ -33,7 +33,7 @@ public class FindWidget extends TextFieldWidget {
         boolean inTextBox = mouseX >= (double)this.x && mouseX < (double)(this.x + this.width) && mouseY >= (double)this.y && mouseY < (double)(this.y + this.height);
         if (inTextBox && button == GLFW.GLFW_MOUSE_BUTTON_2) {
             setText("");  // Clears text on right click
-            return true;
+            return super.mouseClicked(mouseX, mouseY, GLFW.GLFW_MOUSE_BUTTON_1);
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
