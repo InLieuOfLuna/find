@@ -15,3 +15,7 @@ tasks.processResources {
         expand(properties)
     }
 }
+
+tasks.remapJar {
+    archiveBaseName.set("${properties["mod_name"]}")
+}
