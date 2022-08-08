@@ -9,6 +9,7 @@
     "repo": "https://github.com/InLieuOfLuna/find/"
   },
   "LICENSE": "MIT",
+  "icon": "assets/find/icon.png",
   "environment": "client",
   "mixins": [
     "find.mixins.json"
