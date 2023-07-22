@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import me.lunaluna.find.fabric.Startup;
 import me.lunaluna.find.fabric.config.Config;
 import me.lunaluna.find.fabric.widget.FindWidget;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.util.math.MatrixStack;
@@ -39,13 +38,13 @@ public abstract class HandledScreenMixin extends Screen {
         if (widget.isFocused()) {
             if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER) {
                 focusOn(null);
-                widget.setFocused(false);
+                widget.changeFocus(false);
             }
             widget.keyPressed(keyCode, scanCode, modifiers);
             cir.setReturnValue(true);
         } else if (Startup.toggle.matchesKey(keyCode, scanCode) && modifiers == GLFW.GLFW_MOD_CONTROL) {
             focusOn(widget);
-            widget.setFocused(true);
+            widget.changeFocus(true);
             widget.setSelectionStart(0);
             widget.setSelectionEnd(widget.getText().length());
             cir.setReturnValue(true);
@@ -53,23 +52,23 @@ public abstract class HandledScreenMixin extends Screen {
     }
 
     @Inject(at = @At("TAIL"), method = "drawSlot")
-    private void darkenNonMatching(DrawContext context, Slot slot, CallbackInfo ci) {
+    private void darkenNonMatching(MatrixStack context, Slot slot, CallbackInfo ci) {
         if (!widget.matches(slot.getStack())) {
             darkenSlot(context, slot.x, slot.y);
         }
     }
 
     @Inject(at = @At("TAIL"), method = "render")
-    private void renderSearch(DrawContext matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+    private void renderSearch(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         widget.render(matrices, mouseX, mouseY, delta);
     }
-    private void darkenSlot(DrawContext matrices, int x, int y) {
+    private void darkenSlot(MatrixStack matrices, int x, int y) {
         var color = Config.INSTANCE.color().getRGB();
         var border = HAS_BORDER ? 1 : 0;
 
         RenderSystem.disableDepthTest();
         RenderSystem.colorMask(true, true, true, false);
-        matrices.fillGradient(x - border, y - border, x + 16 + border, y + 16 + border, 100, color, color);
+        fillGradient(matrices, x - border, y - border, x + 16 + border, y + 16 + border, color, color, getZOffset());
         RenderSystem.colorMask(true, true, true, true);
         RenderSystem.enableDepthTest();
     }
