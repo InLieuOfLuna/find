@@ -3,7 +3,13 @@ package me.lunaluna.find.fabric.widget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.potion.Potion;
 import net.minecraft.text.Text;
 import org.apache.logging.log4j.util.Strings;
 import org.lwjgl.glfw.GLFW;
@@ -20,11 +26,85 @@ public class FindWidget extends TextFieldWidget {
         setChangedListener(string -> search = string);
     }
 
-    public boolean matches(@Nullable ItemStack item) {
-        String text = getText();
-        if (Strings.isBlank(text)) return true;
-        if(item == null) return false;
-        return item.getName().getString().toLowerCase().contains(text.toLowerCase());
+    private boolean matchString(String string) {
+        String text = getText().toLowerCase();
+        string = string.toLowerCase();
+
+        for (String token : text.split(" "))
+            if (! string.contains(token))
+                return false;
+        return true;
+    }
+
+    public boolean matches(@Nullable ItemStack stack) {
+        try {
+            String text = getText();
+            if (Strings.isBlank(text)) return true;
+            if (stack == null)
+                return false;
+
+            Item item = stack.getItem();
+            if (matchString(item.getName().getString()))
+                return true;
+
+            NbtCompound nbt = stack.getNbt();
+            if (nbt == null)
+                return false;
+
+            for (String key : nbt.getKeys()) {
+                switch (key) {
+                    case "StoredEnchantments":
+                    case "Enchantments":
+                        NbtList enchantmentTag = stack.getNbt().getList(key, 10);
+                        for (int i = 0; i < enchantmentTag.size(); i++) {
+                            NbtCompound nbtTag = enchantmentTag.getCompound(i);
+                            String enchantmentName = nbtTag.getString("id");
+
+                            // Compare the enchantment name to the search text
+                            if (matchString(enchantmentName)) {
+                                return true;
+                            }
+                        }
+                        break;
+                    case "Potion":
+                        NbtElement potionTag = nbt.get(key);
+                        if (potionTag == null)
+                            break;
+                        if (matchString(potionTag.asString()))
+                            return true;
+
+                        Potion potion = Potion.byId(potionTag.asString());
+                        for (StatusEffectInstance effectInstance : potion.getEffects()) {
+                            if (matchString(effectInstance.getEffectType().getName().getString()))
+                                return true;
+                        }
+
+                        break;
+                    case "BlockEntityTag":
+                        NbtCompound blockEntityTag = stack.getSubNbt("BlockEntityTag");
+                        if (blockEntityTag != null && blockEntityTag.contains("Items", 9)) {
+                            NbtList itemList = blockEntityTag.getList("Items", 10);
+                            if (itemList == null)
+                                break;
+
+                            for (int i = 0, len = itemList.size(); i < len; ++i) {
+                                ItemStack s = ItemStack.fromNbt(itemList.getCompound(i));
+                                if (matches(s))
+                                    return true;
+                            }
+
+                        }
+                        break;
+                    default:
+                        // System.out.println(key + ": " + nbt.get(key).toString());
+                }
+
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return  false;
+        }
     }
 
     @Override
