@@ -1,8 +1,8 @@
 package me.lunaluna.find.fabric.widget;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import org.apache.logging.log4j.util.Strings;
@@ -39,7 +39,7 @@ public class FindWidget extends TextFieldWidget {
     }
 
     @Override
-    public void render(DrawContext matrices, int mouseX, int mouseY, float delta) {
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         if (visible()) super.render(matrices, mouseX, mouseY, delta);
     }
 
