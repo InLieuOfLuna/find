@@ -68,7 +68,7 @@ public abstract class HandledScreenMixin extends Screen {
 
         RenderSystem.disableDepthTest();
         RenderSystem.colorMask(true, true, true, false);
-        fillGradient(matrices, x - border, y - border, x + 16 + border, y + 16 + border, 100, color, color);
+        fillGradient(matrices, x - border, y - border, x + 16 + border, y + 16 + border, color, color, 100);
         RenderSystem.colorMask(true, true, true, true);
         RenderSystem.enableDepthTest();
     }
