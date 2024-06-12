@@ -15,7 +15,7 @@ public class FindWidget extends TextFieldWidget {
     public static String search = "";
 
     public FindWidget(int x, int y) {
-        super(MinecraftClient.getInstance().textRenderer, x, y, 174, 18, Text.empty());
+        super(MinecraftClient.getInstance().textRenderer, x, y, 174, 18, Text.of(""));
         setText(search);
         setChangedListener(string -> search = string);
     }
@@ -30,7 +30,7 @@ public class FindWidget extends TextFieldWidget {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (!visible() || !isVisible()) return false;  // Disables mouse clicking when not visible
-        boolean inTextBox = mouseX >= (double)this.getX() && mouseX < (double)(this.getX() + this.width) && mouseY >= (double)this.getY() && mouseY < (double)(this.getY() + this.height);
+        boolean inTextBox = mouseX >= (double)this.x && mouseX < (double)(this.x + this.width) && mouseY >= (double)this.y && mouseY < (double)(this.y + this.height);
         if (inTextBox && button == GLFW.GLFW_MOUSE_BUTTON_2) {
             setText("");  // Clears text on right click
             return super.mouseClicked(mouseX, mouseY, GLFW.GLFW_MOUSE_BUTTON_1);
