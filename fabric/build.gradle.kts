@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "0.12-SNAPSHOT"
+    id("fabric-loom") version "1.7-SNAPSHOT"
 }
 
 dependencies {
@@ -18,4 +18,8 @@ tasks.processResources {
 
 tasks.remapJar {
     archiveBaseName.set("${properties["mod_name"]}")
+}
+
+loom {
+    accessWidenerPath.set(file("src/main/resources/find.accesswidener"))
 }
