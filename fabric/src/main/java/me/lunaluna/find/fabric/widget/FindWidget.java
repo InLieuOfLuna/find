@@ -6,9 +6,8 @@ import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import org.apache.logging.log4j.util.Strings;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
-
-import javax.annotation.Nullable;
 
 public class FindWidget extends TextFieldWidget {
 

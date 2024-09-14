@@ -23,5 +23,6 @@
     "minecraft": "~${minecraft_version}",
     "fabricloader": ">=${loader_version}",
     "fabric-key-binding-api-v1": ">=${fabric_api}"
-  }
+  },
+  "accessWidener": "find.accesswidener"
 }

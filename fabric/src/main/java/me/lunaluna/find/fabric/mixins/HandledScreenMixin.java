@@ -38,13 +38,13 @@ public abstract class HandledScreenMixin extends Screen {
     private void disableFurtherProcessing(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (widget.isFocused()) {
             if (keyCode == GLFW.GLFW_KEY_ESCAPE || keyCode == GLFW.GLFW_KEY_ENTER) {
-                focusOn(null);
+                setFocused(null);
                 widget.setFocused(false);
             }
             widget.keyPressed(keyCode, scanCode, modifiers);
             cir.setReturnValue(true);
         } else if (Startup.toggle.matchesKey(keyCode, scanCode) && modifiers == GLFW.GLFW_MOD_CONTROL) {
-            focusOn(widget);
+            setFocused(widget);
             widget.setFocused(true);
             widget.setSelectionStart(0);
             widget.setSelectionEnd(widget.getText().length());
