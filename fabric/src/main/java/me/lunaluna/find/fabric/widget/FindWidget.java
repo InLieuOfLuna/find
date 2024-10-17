@@ -63,7 +63,7 @@ public class FindWidget extends TextFieldWidget {
             ItemEnchantmentsComponent enchantments = components.get(DataComponentTypes.ENCHANTMENTS);
             for (RegistryEntry<Enchantment> enchantment : enchantments.getEnchantments()) {
                 String enchantmentName = Enchantment.getName(enchantment, enchantments.getLevel(enchantment))
-                        .toString();
+                        .getString();
 
                 if (matchString(enchantmentName)) {
                     return true;
@@ -73,7 +73,7 @@ public class FindWidget extends TextFieldWidget {
         if (components.contains(DataComponentTypes.POTION_CONTENTS)) {
             PotionContentsComponent potionContents = components.get(DataComponentTypes.POTION_CONTENTS);
             for (StatusEffectInstance effect : potionContents.getEffects()) {
-                if (matchString(effect.getEffectType().value().getName().toString()))
+                if (matchString(effect.getEffectType().value().getName().getString()))
                     return true;
             }
         }
