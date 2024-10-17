@@ -3,21 +3,15 @@ package me.lunaluna.find.fabric.widget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.command.argument.RegistryEntryPredicateArgumentType;
 import net.minecraft.component.ComponentMap;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.component.type.NbtComponent;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.potion.Potion;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import org.apache.logging.log4j.util.Strings;
@@ -61,6 +55,17 @@ public class FindWidget extends TextFieldWidget {
 
         if (components.contains(DataComponentTypes.ENCHANTMENTS)) {
             ItemEnchantmentsComponent enchantments = components.get(DataComponentTypes.ENCHANTMENTS);
+            for (RegistryEntry<Enchantment> enchantment : enchantments.getEnchantments()) {
+                String enchantmentName = Enchantment.getName(enchantment, enchantments.getLevel(enchantment))
+                        .getString();
+
+                if (matchString(enchantmentName)) {
+                    return true;
+                }
+            }
+        }
+        if (components.contains(DataComponentTypes.STORED_ENCHANTMENTS)) {
+            ItemEnchantmentsComponent enchantments = components.get(DataComponentTypes.STORED_ENCHANTMENTS);
             for (RegistryEntry<Enchantment> enchantment : enchantments.getEnchantments()) {
                 String enchantmentName = Enchantment.getName(enchantment, enchantments.getLevel(enchantment))
                         .getString();
